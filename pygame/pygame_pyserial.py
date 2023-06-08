@@ -38,6 +38,8 @@ joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_coun
 
 FTDI = serial.Serial('/dev/ttyUSB0', 2000000)
 
+print("Starting...")
+
 def main():
 
     # def __init__(self):
@@ -77,41 +79,41 @@ def main():
                         if(abs(event.value)<deadband):
                             pad_input_X = 0.0
                         else:
-                            pad_input_X = round(event.value, 3)
+                            pad_input_X = -round(event.value, 4)
 
                     case 1:
                         if(abs(event.value)<deadband):
                             pad_input_Y = 0.0
                         else:
-                            pad_input_Y = round(event.value, 3)
+                            pad_input_Y = round(event.value, 4)
 
                     case 2:
                         if(abs(event.value+1)<deadband):
                             pad_input_L2 = 0.0
                         else:
-                            pad_input_L2 = round(event.value, 3)
+                            pad_input_L2 = round(event.value, 4)
                         
                     case 3:
                         if(abs(event.value)<deadband):
                             pad_input_Z = 0.0
                         else:
-                            pad_input_Z = round(event.value, 3)
+                            pad_input_Z = round(event.value, 4)
                     
                     case 4:
                         if(abs(event.value)<deadband):
                             pad_input_E = 0.0
                         else:
-                            pad_input_E = round(event.value, 3)
+                            pad_input_E = round(event.value, 4)
 
                     case 5:
                         if(abs(event.value+1)<deadband):
                             pad_input_R2 = 0.0
                         else:
-                            pad_input_R2 = round(event.value, 3)
+                            pad_input_R2 = round(event.value, 4)
                         
 
-            if event.type == pygame.JOYBUTTONDOWN:
-                print(event)
+            # if event.type == pygame.JOYBUTTONDOWN:
+            #     print(event)
 
 
         if(time.time() - start_time > print_interval * print_index):
