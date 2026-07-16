@@ -34,8 +34,7 @@ uint8_t brightness = 5;
 #define LED_PIN_11    39
 #define LED_PIN_12    40
 
-// #define LED_COUNT 104
-#define LED_COUNT 10
+#define LED_COUNT 104
 
 Adafruit_NeoPixel strip1(LED_COUNT, LED_PIN_1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip2(LED_COUNT, LED_PIN_2, NEO_GRB + NEO_KHZ800);
@@ -50,10 +49,10 @@ Adafruit_NeoPixel strip10(LED_COUNT, LED_PIN_10, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip11(LED_COUNT, LED_PIN_11, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip12(LED_COUNT, LED_PIN_12, NEO_GRB + NEO_KHZ800);
 
-float fft_gain = 10;
+float fft_gain = 15;
 float scale = 60.0;
 float levels51[51];
-int   shown51[12][51];
+int   on_off_array[12][51];
 
 
 void colorWipe(uint32_t color, int wait) {
@@ -213,170 +212,218 @@ void handleFFT() {
 }
 
 
-void test_display() {
-    uint32_t time1 = micros();
-
+void handleOnOffArray() {
     for (int i=0; i<51; i++) {
         for (int j=0; j<12; j++) {
-            shown51[j][i] = 0;
+            on_off_array[j][i] = 0;
         }
     }
-
-    uint32_t time2 = micros();
 
     // switch case with ints
     for (int i=0; i<51; i++) {
         if (levels51[i]>12) {
             for (int j=0; j<12; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>11) {
             for (int j=0; j<11; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>10) {
             for (int j=0; j<10; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>9) {
             for (int j=0; j<9; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>8) {
             for (int j=0; j<8; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>7) {
             for (int j=0; j<7; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>6) {
             for (int j=0; j<6; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>5) {
             for (int j=0; j<5; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>4) {
             for (int j=0; j<4; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>3) {
             for (int j=0; j<3; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>2) {
             for (int j=0; j<2; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
         else if (levels51[i]>1) {
             for (int j=0; j<1; j++) {
-                shown51[j][i] = 1;
+                on_off_array[j][i] = 1;
             }
         }
     }
+}
 
-    uint32_t time3 = micros();
+void printOnOffArray() {
+    Serial.print("\n\t0");
+    for (int n=1; n<6; n++) {
+        Serial.print(" . . . . . . . . . ");
+        Serial.print(n);
+    }
+    Serial.println();
 
-    for (int i=10; i>=0; i--) {
-        strip1.setPixelColor(i, strip1.Color(shown51[0][i]*50, 0, 0));
-        strip2.setPixelColor(i, strip1.Color(shown51[1][i]*50, 0, 0));
-        strip3.setPixelColor(i, strip1.Color(shown51[2][i]*50, 0, 0));
-        strip4.setPixelColor(i, strip1.Color(shown51[3][i]*50, 0, 0));
-        strip5.setPixelColor(i, strip1.Color(shown51[4][i]*50, 0, 0));
-        strip6.setPixelColor(i, strip1.Color(shown51[5][i]*50, 0, 0));
-        strip7.setPixelColor(i, strip1.Color(shown51[6][i]*50, 0, 0));
-        strip8.setPixelColor(i, strip1.Color(shown51[7][i]*50, 0, 0));
-        strip9.setPixelColor(i, strip1.Color(shown51[8][i]*50, 0, 0));
-        strip10.setPixelColor(i, strip1.Color(shown51[9][i]*50, 0, 0));
-        strip11.setPixelColor(i, strip1.Color(shown51[10][i]*50, 0, 0));
-        strip12.setPixelColor(i, strip1.Color(shown51[11][i]*50, 0, 0));
+    for (int j=11; j>=0; j--) {
+        Serial.print(j);
+        Serial.print("\t");
 
-        strip1.show();   
-        strip2.show();
-        strip3.show();
-        strip4.show();
-        strip5.show();
-        strip6.show();
-        strip7.show();
-        strip8.show();
-        strip9.show();
-        strip10.show();
-        strip11.show();
-        strip12.show();
+        for (int i=0; i<51; i++) {
+            Serial.print(on_off_array[j][i]);
+            Serial.print(" ");
+        }
+        Serial.println();
+    }
 
-        // Serial.print(shown51[0][i]*50);
+    // delay(100);
+}
+
+
+void test_display() {
+    uint32_t time1 = micros();
+
+    for (int i=51; i>=0; i--) {
+        strip1.setPixelColor(i, strip1.Color(on_off_array[0][i]*50, 0, 0));
+        strip2.setPixelColor(i, strip1.Color(on_off_array[1][i]*50, 0, 0));
+        strip3.setPixelColor(i, strip1.Color(on_off_array[2][i]*50, 0, 0));
+        strip4.setPixelColor(i, strip1.Color(on_off_array[3][i]*50, 0, 0));
+        strip5.setPixelColor(i, strip1.Color(on_off_array[4][i]*50, 0, 0));
+        strip6.setPixelColor(i, strip1.Color(on_off_array[5][i]*50, 0, 0));
+        strip7.setPixelColor(i, strip1.Color(on_off_array[6][i]*50, 0, 0));
+        strip8.setPixelColor(i, strip1.Color(on_off_array[7][i]*50, 0, 0));
+        strip9.setPixelColor(i, strip1.Color(on_off_array[8][i]*50, 0, 0));
+        strip10.setPixelColor(i, strip1.Color(on_off_array[9][i]*50, 0, 0));
+        strip11.setPixelColor(i, strip1.Color(on_off_array[10][i]*50, 0, 0));
+        strip12.setPixelColor(i, strip1.Color(on_off_array[11][i]*50, 0, 0));
+
+
+        // Serial.print(on_off_array[0][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[1][i]*50);
+        // Serial.print(on_off_array[1][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[2][i]*50);
+        // Serial.print(on_off_array[2][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[3][i]*50);
+        // Serial.print(on_off_array[3][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[4][i]*50);
+        // Serial.print(on_off_array[4][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[5][i]*50);
+        // Serial.print(on_off_array[5][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[6][i]*50);
+        // Serial.print(on_off_array[6][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[7][i]*50);
+        // Serial.print(on_off_array[7][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[8][i]*50);
+        // Serial.print(on_off_array[8][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[9][i]*50);
+        // Serial.print(on_off_array[9][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[10][i]*50);
+        // Serial.print(on_off_array[10][i]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[11][i]*50);
+        // Serial.print(on_off_array[11][i]*50);
         // Serial.println();
 
-        // Serial.print(shown51[i][0]*50);
+        // Serial.print(on_off_array[i][0]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][1]*50);
+        // Serial.print(on_off_array[i][1]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][2]*50);
+        // Serial.print(on_off_array[i][2]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][3]*50);
+        // Serial.print(on_off_array[i][3]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][4]*50);
+        // Serial.print(on_off_array[i][4]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][5]*50);
+        // Serial.print(on_off_array[i][5]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][6]*50);
+        // Serial.print(on_off_array[i][6]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][7]*50);
+        // Serial.print(on_off_array[i][7]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][8]*50);
+        // Serial.print(on_off_array[i][8]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][9]*50);
+        // Serial.print(on_off_array[i][9]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][10]*50);
+        // Serial.print(on_off_array[i][10]*50);
         // Serial.print("\t");
-        // Serial.print(shown51[i][11]*50);
+        // Serial.print(on_off_array[i][11]*50);
         // Serial.println();
     }
 
-    uint32_t time4 = micros();
+    strip1.show();   
+    strip2.show();
+    strip3.show();
+    strip4.show();
+    strip5.show();
+    strip6.show();
+    strip7.show();
+    strip8.show();
+    strip9.show();
+    strip10.show();
+    strip11.show();
+    strip12.show();
+
+    uint32_t time2 = micros();
 
     Serial.print(time2 - time1);
-    Serial.print("\t");
-    Serial.print(time3 - time2);
-    Serial.print("\t");
-    Serial.print(time4 - time3);
     Serial.println();
-    delay(100);
+    // delay(100);
+}
+
+void LEDsOff() {
+    for (int i=104; i>=0; i--) {
+        strip1.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip2.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip3.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip4.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip5.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip6.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip7.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip8.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip9.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip10.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip11.setPixelColor(i, strip1.Color(0, 0, 0));
+        strip12.setPixelColor(i, strip1.Color(0, 0, 0));
+    }
+
+    strip1.show();   
+    strip2.show();
+    strip3.show();
+    strip4.show();
+    strip5.show();
+    strip6.show();
+    strip7.show();
+    strip8.show();
+    strip9.show();
+    strip10.show();
+    strip11.show();
+    strip12.show();
 }
 
 
@@ -412,18 +459,8 @@ void setup() {
     strip11.begin();
     strip12.begin();
 
-    strip1.show();                          //  Update strip to match
-    strip2.show();
-    strip3.show();
-    strip4.show();
-    strip5.show();
-    strip6.show();
-    strip7.show();
-    strip8.show();
-    strip9.show();
-    strip10.show();
-    strip11.show();
-    strip12.show();
+    delay(100);
+    void LEDsOff();
 
     strip2.setBrightness(brightness);
     strip1.setBrightness(brightness);                          //  Update strip to match
@@ -446,23 +483,11 @@ void loop() {
 //   colorWipe(strip1.Color(  0, 255,   0), 50); // Green
 //   colorWipe(strip1.Color(  0,   0, 255), 50); // Blue
 
-    // uint32_t time1 = millis();
+
     // rainbow(1);             // Flowing rainbow cycle along the whole strip
     handleFFT();
-
-    // uint32_t time2 = millis();
-
+    handleOnOffArray();
+    printOnOffArray();
     test_display();
-
-    // Serial.print(time2 - time1);
-    // Serial.print("\t");
-    // Serial.println(millis() - time2);
-
-
-    // for (int i=0; i<12; i++) {
-    //     Serial.print(shown51[i][10]);
-    //     Serial.print("\t");
-    // }
-    // Serial.println();
 }
 
