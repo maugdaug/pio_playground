@@ -15,7 +15,8 @@ AudioMixer4                 mixer1;
 AudioConnection             patchCord1(i2s1, 0, mixer1, 0);
 AudioConnection             patchCord3(i2s1, 1, mixer1, 1);
 AudioConnection             patchCord5(mixer1, fft1024);
-AudioConnection             patchCord3(mixer1, 0, i2s2, 1);
+AudioConnection             patchCord6(mixer1, 0, i2s2, 0);
+AudioConnection             patchCord4(mixer1, 0, i2s2, 1);
 AudioControlSGTL5000        audioShield;
 
 
@@ -283,7 +284,7 @@ void printOnOffArray() {
         Serial.println();
     }
 
-    // delay(100);
+    delay(50);
 }
 
 
@@ -494,9 +495,9 @@ void loop() {
     uint32_t time1 = micros();
 
     rainbow(1);             // Flowing rainbow cycle along the whole strip
-    // handleFFT();
-    // handleOnOffArray();
-    // printOnOffArray();
+    handleFFT();
+    handleOnOffArray();
+    printOnOffArray();
     // test_display();
 
     uint32_t time2 = micros();
